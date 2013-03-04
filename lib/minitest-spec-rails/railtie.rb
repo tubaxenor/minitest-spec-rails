@@ -6,9 +6,6 @@ module MiniTestSpecRails
     
     config.before_initialize do |app|
       if Rails.env.test?
-        ActiveSupport.on_load(:action_view) do
-          require 'minitest-spec-rails/init/action_view'
-        end
         ActiveSupport.on_load(:action_controller) do 
           require 'minitest-spec-rails/init/action_controller'
           require 'action_dispatch/testing/integration' # For Rails 3.0 loading.
@@ -22,6 +19,7 @@ module MiniTestSpecRails
 
     initializer 'minitest-spec-rails.after.load_active_support', :after => :load_active_support, :group => :all do |app|
       if Rails.env.test?
+        require 'minitest-spec-rails/init/action_view'
         require 'minitest-spec-rails/init/active_support'
         require 'minitest-spec-rails/init/mini_shoulda' if app.config.minitest_spec_rails.mini_shoulda
         require 'minitest/autorun'
